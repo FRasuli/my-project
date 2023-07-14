@@ -1,16 +1,13 @@
-# Настройки пайплайна
-name: CI-deno
+name: CI
 
-# Определение событий, которые запускают пайплайн
 on:
   push:
     branches:
       - main
 
-# Определение этапов
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout репозитория
@@ -25,7 +22,7 @@ jobs:
         run: npm ci
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout репозитория
@@ -43,7 +40,7 @@ jobs:
         run: npm run test
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout репозитория
