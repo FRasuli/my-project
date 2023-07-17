@@ -22,23 +22,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm install socket.io --save
-        
-      - name: Build project
-        run: npm run build
+        run: npm install 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist/
-
+        
   test:
-    name: Test
     runs-on: ubuntu-latest
-    #strategy:
-     # matrix:
-      #  node-version: [14.x]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -51,11 +43,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Start test
+      - name: Run test
         run: npm run test
         
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
