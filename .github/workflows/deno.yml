@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [14.x]
@@ -21,47 +21,64 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Установка зависимостей
+      - name: Install dependencies
         run: npm install
+        
+      - name: Build project
+        run: npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist/
 
   test:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
+    name: Test
+    runs-on: ubuntu-latest
+    #strategy:
+     # matrix:
+      #  node-version: [14.x]
 
     steps:
-      - name: Checkout репозитория
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Установка Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+      #- name: Set up Node.js
+      #  uses: actions/setup-node@v3
+      #  with:
+       #   node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm install
 
       - name: Start test
         run: npm run test
+        
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage/
 
   deploy:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    #strategy:
+     # matrix:
+        #node-version: [14.x]
 
     steps:
-      - name: Checkout репозитория
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Установка Node.js
-        uses: actions/setup-node@v3
+      #- name: Установка Node.js
+        #uses: actions/setup-node@v3
+       # with:
+        #  node-version: ${{ matrix.node-version }}
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Установка зависимостей
-        run: npm install
-
-      - name: Деплой приложения
-        run: npm run deploy
+          branch: gh-pages
+          folder: dist
