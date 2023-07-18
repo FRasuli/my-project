@@ -46,6 +46,9 @@ jobs:
       - name: Install dependencies
         run: npm install package.json
 
+      - name: Mv
+        run: mv package.json /home/runner/work/my-project/my-project/
+
       - name: Run test
         run: npm run test
         
