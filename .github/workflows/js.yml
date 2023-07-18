@@ -7,10 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
-    #strategy:
-     # matrix:
-      #  node-version: [14.x]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
 
     steps:
       - name: Checkout code
@@ -18,8 +18,8 @@ jobs:
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
-       # with:
-        #  node-version: ${{ matrix.node-version }}
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm install 
@@ -30,24 +30,24 @@ jobs:
           path: dist/
         
   test:
-    runs-on: windows-latest
-    #strategy:
-     # matrix:
-      #  node-version: [14.x]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
-       # with:
-        #  node-version: ${{ matrix.node-version }}
+        with:
+          node-version: ${{ matrix.node-version }}
 
-      #- name: Install dependencies
-       # run: npm install package.json
+      - name: Install dependencies
+        run: npm install package.json
 
-      #- name: Mv
-       # run: mv package.json /home/runner/work/my-project/my-project/
+      - name: Mv
+        run: mv package.json /home/runner/work/my-project/my-project/
 
       - name: Run test
         run: npm run test
@@ -61,10 +61,10 @@ jobs:
   deploy:
     name: Deploy
     runs-on: windows-latest
-    #needs: build
-    #strategy:
-     # matrix:
-        #node-version: [14.x]
+    needs: build
+    strategy:
+      matrix:
+        node-version: [14.x]
 
     steps:
       - name: Checkout code
